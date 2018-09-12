@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"      
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.master.dao.Idao">
+<resultMap type="kr.co.master.dto.List" id="List">
+	<result property="request.id" column="id"/>
+	<result property="request.li_kind" column="li_kind"/>
+	<result property="request.li_station" column="li_station"/>
+	<result property="request.li_year" column="li_year"/>
+	<result property="request.li_month" column="li_month"/>
+	<result property="request.li_day" column="li_day"/>
+	<result property="request.li_hour" column="li_hour"/>
+	<result property="request.li_minute" column="li_minute"/>
+	<result property="request.li_post" column="li_post"/>
+	<result property="request.li_appr" column="li_appr"/>
+	<result property="request.mem_id" column="mem_id"/>
+	<result property="request.li_otherSta" column="li_otherSta"/>
+	<result property="member.id" column="mem_id"/>
+	<result property="member.mem_name" column="mem_name"/>
+	<result property="member.mem_mid" column="mem_mid"/>
+	<result property="member.mem_pw" column="mem_pw"/>
+	<result property="member.mem_myp" column="mem_myp"/>
+	<result property="member.mem_email" column="mem_email"/>
+	<result property="member.mem_subp" column="mem_subp"/>
+	<result property="member.mem_etc" column="mem_etc"/>
+	<result property="member.mem_age" column="mem_age"/>
+	<result property="member.mem_key" column="mem_key"/>
+</resultMap>
+<insert id="insertStation">
+insert into station values(station_seq.nextval,#{param1},#{param2},#{param3},#{param4})
+</insert>
+<select id="stationCount" resultType="Integer">
+select count(*) from station where st_id=#{param1}
+</select>
+<select id="login" resultType="Integer">
+select count(*) from station where st_id=#{param1} and st_pw=#{param2}
+</select>
+<select id="getStationInfo" resultType="kr.co.master.dto.Station">
+select * from station where st_id=#{param1} and st_pw=#{param2}
+</select>
+<insert id="insertRequest">
+insert into request values(request_seq.nextval,#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7},#{param8}
+,#{param9},#{param10},#{param11})
+</insert>
+<select id="getList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 Order by A.id desc
+</select>
+<select id="getAppList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 Order by A.id desc
+</select>
+<select id="getReList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 Order by A.id desc
+</select>
+<select id="getPost" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.id = #{param1}
+</select>
+<select id="getBooking" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1
+</select>
+<update id="updateList">
+update request set li_appr=1 where id=#{param1}
+</update>
+<update id="updateReList">
+update request set li_appr=2 where id=#{param1}
+</update>
+<delete id="delList">
+delete from request where id=#{param1}
+</delete>
+
+<select id="getAllShList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and A.li_month = #{param2} and A.li_day = #{param3} and B.mem_name like '%'||#{param4}||'%' Order by A.id desc
+</select>
+<select id="getMoList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and A.li_month = #{param2} Order by A.id desc
+</select>
+<select id="getMoDaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and A.li_month = #{param2} and A.li_day = #{param3} Order by A.id desc
+</select>
+<select id="getMoDaKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and A.li_month = #{param2} and A.li_day = #{param3} and A.li_kind = #{param4} Order by A.id desc
+</select>
+<select id="getMoDaKiNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and A.li_month = #{param2} and A.li_day = #{param3} and A.li_kind = #{param4} and B.mem_name like '%'||#{param5}||'%' Order by A.id desc
+</select>
+<select id="getMoNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and A.li_month = #{param2} and B.mem_name like '%'||#{param3}||'%' Order by A.id desc
+</select>
+<select id="getMoKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and A.li_month = #{param2} and A.li_kind = #{param3} Order by A.id desc
+</select>
+<select id="getMoDaNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and A.li_month = #{param2} and A.li_day = #{param3} and B.mem_name like '%'||#{param4}||'%' Order by A.id desc
+</select>
+<select id="getMoKiNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and A.li_month = #{param2} and A.li_kind = #{param3} and B.mem_name like '%'||#{param4}||'%' Order by A.id desc
+</select>
+<select id="getDaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and A.li_day = #{param2} Order by A.id desc
+</select>
+<select id="getDaKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and A.li_day = #{param2} and A.li_kind = #{param3} Order by A.id desc
+</select>
+<select id="getDaNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and A.li_day = #{param2} and B.mem_name like '%'||#{param3}||'%' Order by A.id desc
+</select>
+<select id="getDaNaKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and A.li_day = #{param2} and B.mem_name like '%'||#{param3}||'%' and A.li_kind = #{param4} Order by A.id desc
+</select>
+<select id="getNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and B.mem_name like '%'||#{param2}||'%' Order by A.id desc
+</select>
+<select id="getNaKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and B.mem_name like '%'||#{param2}||'%' and A.li_kind = #{param3} Order by A.id desc
+</select>
+<select id="getKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and A.li_kind = #{param2} Order by A.id desc
+</select>
+<select id="getAllShTwoList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and A.li_month = #{param2} and A.li_day = #{param3} and B.mem_name like '%'||#{param4}||'%' and A.li_kind = #{param5} Order by A.id desc
+</select>
+
+<select id="getAppAllShList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and A.li_month = #{param2} and A.li_day = #{param3} and B.mem_name like '%'||#{param4}||'%' Order by A.id desc
+</select>
+<select id="getAppMoList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and A.li_month = #{param2} Order by A.id desc
+</select>
+<select id="getAppMoDaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and A.li_month = #{param2} and A.li_day = #{param3} Order by A.id desc
+</select>
+<select id="getAppMoDaKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and A.li_month = #{param2} and A.li_day = #{param3} and A.li_kind = #{param4} Order by A.id desc
+</select>
+<select id="getAppMoDaKiNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and A.li_month = #{param2} and A.li_day = #{param3} and A.li_kind = #{param4} and B.mem_name like '%'||#{param5}||'%' Order by A.id desc
+</select>
+<select id="getAppMoNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and A.li_month = #{param2} and B.mem_name like '%'||#{param3}||'%' Order by A.id desc
+</select>
+<select id="getAppMoKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and A.li_month = #{param2} and A.li_kind = #{param3} Order by A.id desc
+</select>
+<select id="getAppMoDaNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and A.li_month = #{param2} and A.li_day = #{param3} and B.mem_name like '%'||#{param4}||'%' Order by A.id desc
+</select>
+<select id="getAppMoKiNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and A.li_month = #{param2} and A.li_kind = #{param3} and B.mem_name like '%'||#{param4}||'%' Order by A.id desc
+</select>
+<select id="getAppDaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and A.li_day = #{param2} Order by A.id desc
+</select>
+<select id="getAppDaKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and A.li_day = #{param2} and A.li_kind = #{param3} Order by A.id desc
+</select>
+<select id="getAppDaNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and A.li_day = #{param2} and B.mem_name like '%'||#{param3}||'%' Order by A.id desc
+</select>
+<select id="getAppDaNaKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and A.li_day = #{param2} and B.mem_name like '%'||#{param3}||'%' and A.li_kind = #{param4} Order by A.id desc
+</select>
+<select id="getAppNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and B.mem_name like '%'||#{param2}||'%' Order by A.id desc
+</select>
+<select id="getAppNaKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and B.mem_name like '%'||#{param2}||'%' and A.li_kind = #{param3} Order by A.id desc
+</select>
+<select id="getAppKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and A.li_kind = #{param2} Order by A.id desc
+</select>
+<select id="getAppAllShTwoList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and A.li_month = #{param2} and A.li_day = #{param3} and B.mem_name like '%'||#{param4}||'%' and A.li_kind = #{param5} Order by A.id desc
+</select>
+
+<select id="getReAllShList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and A.li_month = #{param2} and A.li_day = #{param3} and B.mem_name like '%'||#{param4}||'%' Order by A.id desc
+</select>
+<select id="getReMoList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and A.li_month = #{param2} Order by A.id desc
+</select>
+<select id="getReMoDaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and A.li_month = #{param2} and A.li_day = #{param3} Order by A.id desc
+</select>
+<select id="getReMoDaKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and A.li_month = #{param2} and A.li_day = #{param3} and A.li_kind = #{param4} Order by A.id desc
+</select>
+<select id="getReMoDaKiNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and A.li_month = #{param2} and A.li_day = #{param3} and A.li_kind = #{param4} and B.mem_name like '%'||#{param5}||'%' Order by A.id desc
+</select>
+<select id="getReMoNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and A.li_month = #{param2} and B.mem_name like '%'||#{param3}||'%' Order by A.id desc
+</select>
+<select id="getReMoKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and A.li_month = #{param2} and A.li_kind = #{param3} Order by A.id desc
+</select>
+<select id="getReMoDaNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and A.li_month = #{param2} and A.li_day = #{param3} and B.mem_name like '%'||#{param4}||'%' Order by A.id desc
+</select>
+<select id="getReMoKiNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and A.li_month = #{param2} and A.li_kind = #{param3} and B.mem_name like '%'||#{param4}||'%' Order by A.id desc
+</select>
+<select id="getReDaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and A.li_day = #{param2} Order by A.id desc
+</select>
+<select id="getReDaKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and A.li_day = #{param2} and A.li_kind = #{param3} Order by A.id desc
+</select>
+<select id="getReDaNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and A.li_day = #{param2} and B.mem_name like '%'||#{param3}||'%' Order by A.id desc
+</select>
+<select id="getReDaNaKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and A.li_day = #{param2} and B.mem_name like '%'||#{param3}||'%' and A.li_kind = #{param4} Order by A.id desc
+</select>
+<select id="getReNaList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and B.mem_name like '%'||#{param2}||'%' Order by A.id desc
+</select>
+<select id="getReNaKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and B.mem_name like '%'||#{param2}||'%' and A.li_kind = #{param3} Order by A.id desc
+</select>
+<select id="getReKiList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and A.li_kind = #{param2} Order by A.id desc
+</select>
+<select id="getReAllShTwoList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and A.li_month = #{param2} and A.li_day = #{param3} and B.mem_name like '%'||#{param4}||'%' and A.li_kind = #{param5} Order by A.id desc
+</select>
+
+<select id="getYeList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 0 and A.li_year = #{param2} Order by A.id desc
+</select>
+<select id="getAppYeList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 1 and A.li_year = #{param2} Order by A.id desc
+</select>
+<select id="getReYeList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.li_station = #{param1} and A.li_appr = 2 and A.li_year = #{param2} Order by A.id desc
+</select>
+
+<insert id="insertMember">
+insert into member values(mem_seq.nextval,#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7},#{param8},#{param9})
+</insert>
+<select id="chMember" resultType="Integer">
+select count(*) from member where mem_mid=#{param1}
+</select>
+<select id="chEmail" resultType="Integer">
+select count(*) from member where mem_email=#{param1}
+</select>
+<select id="logMember" resultType="Integer">
+select count(*) from member where mem_mid=#{param1} and mem_pw=#{param2}
+</select>
+<select id="getMember" resultType="kr.co.master.dto.Member">
+select * from member where mem_mid=#{param1} and mem_pw=#{param2}
+</select>
+<insert id="insertBookmark">
+insert into bookmark values(book_seq.nextval,#{param1},#{param2},#{param3},#{param4})
+</insert>
+<delete id="delBookmark">
+delete from bookmark where id=#{param1}
+</delete>
+<select id="getBookmark" resultType="kr.co.master.dto.Bookmark">
+select * from bookmark where mem_id=#{param1}
+</select>
+
+<select id="chMyList" resultMap="List">
+select * from request A, member B where A.mem_id = B.id and A.id = #{param1}
+</select>
+
+<update id="updatekey">
+update member set mem_key=#{param1} where id=#{param2}
+</update>
+
+<select id="chBookmark" resultType="Integer">
+select count(*) from bookmark where book_start=#{param1} and mem_id=#{param2}
+</select>
+
+<delete id="delBusBookmark">
+delete from bookmark where book_start=#{param1} and mem_id=#{param2}
+</delete>
+
+<select id="returnRequest" resultType="kr.co.master.dto.Request">
+select * from request where mem_id = #{param1}
+</select>
+
+<update id="updateMember">
+update member set mem_name=#{param1}, mem_myp=#{param2}, mem_subp=#{param3}, mem_etc=#{param4}, mem_age=#{param5} where id= #{param6}
+</update>
+
+<update id="updatePw">
+update member set mem_pw=#{param1} where id=#{param2}
+</update>
+
+<insert id="insertNotice">
+insert into notice values(notice_seq.nextval,#{param1},#{param2},#{param3})
+</insert>
+
+<select id="selectNotice" resultType="kr.co.master.dto.Notice">
+select * from notice
+</select>
+
+<update id="updateNotice">
+update notice set notice_title=#{param1}, notice_contents=#{param2}, notice_date=#{param3}  where id=#{param4}
+</update>
+
+<select id="selectBookmark" resultType="kr.co.master.dto.Bookmark">
+select * from bookmark where mem_id=#{param1} and book_start=#{param2} and book_end=#{param3}
+</select>
+
+<delete id="deleteNotice">
+delete from notice where id=#{param1}
+</delete>
+
+</mapper>
